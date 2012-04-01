@@ -14,6 +14,8 @@ public class GameOfLifeActivity extends Activity {
 	private static final int REFRESH = 0x000001;
 	private static final int CLEAR = 0x000002;
 	private static final int START = 0x000003;
+	private static final int STOP = 0x000004;
+	private Thread thread = new Thread(new GameThread());
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,28 +37,59 @@ public class GameOfLifeActivity extends Activity {
     			mGameView.clear();
     			break;
     		case GameOfLifeActivity.START:
+    			mGameView.changeStatus();
     			break;
     		}
     		super.handleMessage(msg);
     	}
     };
+    class GameThread implements Runnable{
+    	private int alive = 1;
+    	public void run(){
+    		if(alive == 1)
+    		while(!Thread.currentThread().isInterrupted()){
+    			Message message = new Message();
+    			message.what = GameOfLifeActivity.START;
+    			GameOfLifeActivity.this.myHandler.sendMessage(message);
+    			try{
+    				Thread.sleep(100);
+    			}
+    			catch(InterruptedException e){
+    				Thread.currentThread().interrupt();
+    			}
+    		}
+    	}
+    	public void suspend(){
+    		alive = 0;
+    	}
+    }
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
 		menu.add(0, GameOfLifeActivity.CLEAR, 1, "Clear" );
 		menu.add(0, GameOfLifeActivity.START, 2, "Start" );
+		menu.add(0, GameOfLifeActivity.STOP, 3, "Stop");
         return result;
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
+		Message message = new Message();
+		
         switch( id ) {
             case GameOfLifeActivity.CLEAR:
-            	Message message = new Message();
     			message.what = GameOfLifeActivity.CLEAR;
         		GameOfLifeActivity.this.myHandler.sendMessage(message);
                 break;
             case GameOfLifeActivity.START:
+            	thread = new Thread(new GameThread());
+            	thread.start();
                 break;
+            case GameOfLifeActivity.STOP:
+            	if(thread != null){
+            		thread.interrupt();
+            		thread = null;
+            	}
+            	break;
         }
         return true;
     }
