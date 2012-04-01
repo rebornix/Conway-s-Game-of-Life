@@ -19,6 +19,7 @@ public class Cube {
 	}
 	public void setNextState(){
 		int count = 0;
+		/*
 		//left top
 		if(row - 1 >= 0 && column - 1 >= 0 && stateArray[row-1][column-1] == 1) ++count;
 		//top
@@ -35,6 +36,23 @@ public class Cube {
 		if(row + 1 <= 15 && stateArray[row+1][column] == 1) ++count;
 		//right bottom
 		if(row + 1 <= 15 && column + 1 <= 29 && stateArray[row+1][column+1] == 1) ++count;
+		*/
+		//left top
+		if(stateArray[(row-1+16)%16][(column-1+30)%30] == 1) ++count;
+		//top
+		if(stateArray[(row-1+16)%16][column] == 1) ++count;
+		//right top
+		if(stateArray[(row-1+16)%16][(column+1+30)%30] == 1) ++count;
+		//left
+		if(stateArray[row][(column-1+30)%30] == 1) ++count;
+		//right
+		if(stateArray[row][(column+1+30)%30] == 1) ++count;
+		//left bottom
+		if(stateArray[(row+1+16)%16][(column - 1+30)%30] == 1) ++count;
+		//bottom
+		if(stateArray[(row+1+16)%16][column] == 1) ++count;
+		//right bottom
+		if(stateArray[(row+1+16)%16][(column+1+30)%30] == 1) ++count;
 		
 		if(count == 3)
 			this.nextState = 1;

@@ -81,8 +81,14 @@ public class GameOfLifeActivity extends Activity {
         		GameOfLifeActivity.this.myHandler.sendMessage(message);
                 break;
             case GameOfLifeActivity.START:
-            	thread = new Thread(new GameThread());
-            	thread.start();
+            	if(thread == null){
+            		thread = new Thread(new GameThread());
+            		thread.start();
+            	}
+            	else if(!thread.isAlive()){
+            		thread = new Thread(new GameThread());
+            		thread.start();
+            	}
                 break;
             case GameOfLifeActivity.STOP:
             	if(thread != null){
