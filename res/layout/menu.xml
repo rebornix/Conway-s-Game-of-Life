@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menu_save"
-          android:title="menu_save"
-          android:showAsAction="ifRoom|withText" />
+    <item android:id="@+id/content_discard"
+        android:title="content_discard"
+        android:icon="@drawable/content_discard"
+        android:orderInCategory="0"
+        android:showAsAction="always" />
+    <item android:id="@+id/start_run"
+        android:title="start_run"
+        android:icon="@drawable/start_run"
+        android:orderInCategory="0"
+        android:showAsAction="always" />
+   <item android:id="@+id/single_step"
+        android:title="single_step"
+        android:icon="@drawable/single_step"
+        android:orderInCategory="0"
+        android:showAsAction="always" />
+   <item android:id="@+id/pause"
+        android:title="pause"
+        android:icon="@drawable/pause"
+        android:orderInCategory="0"
+        android:showAsAction="always" />
 </menu>

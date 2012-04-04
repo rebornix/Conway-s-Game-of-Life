@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.widget.SearchView;
 
 public class GameOfLifeActivity extends Activity {
     /** Called when the activity is first created. */
@@ -14,7 +17,7 @@ public class GameOfLifeActivity extends Activity {
 	private static final int REFRESH = 0x000001;
 	private static final int CLEAR = 0x000002;
 	private static final int START = 0x000003;
-	private static final int STOP = 0x000004;
+	private static final int STEP = 0x000005;
 	private Thread thread = new Thread(new GameThread());
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,11 +67,10 @@ public class GameOfLifeActivity extends Activity {
     	}
     }
     public boolean onCreateOptionsMenu(Menu menu) {
-        boolean result = super.onCreateOptionsMenu(menu);
-		menu.add(0, GameOfLifeActivity.CLEAR, 1, "Clear" );
-		menu.add(0, GameOfLifeActivity.START, 2, "Start" );
-		menu.add(0, GameOfLifeActivity.STOP, 3, "Stop");
-        return result;
+    	MenuInflater inflater = getMenuInflater();
+    	inflater.inflate(R.layout.menu, menu);
+    	return super.onCreateOptionsMenu(menu);
+        
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -76,11 +78,12 @@ public class GameOfLifeActivity extends Activity {
 		Message message = new Message();
 		
         switch( id ) {
-            case GameOfLifeActivity.CLEAR:
+            case R.id.content_discard:
+            	Log.i("click", "discard");
     			message.what = GameOfLifeActivity.CLEAR;
         		GameOfLifeActivity.this.myHandler.sendMessage(message);
                 break;
-            case GameOfLifeActivity.START:
+            case R.id.start_run:
             	if(thread == null){
             		thread = new Thread(new GameThread());
             		thread.start();
@@ -90,7 +93,13 @@ public class GameOfLifeActivity extends Activity {
             		thread.start();
             	}
                 break;
-            case GameOfLifeActivity.STOP:
+            case R.id.single_step:
+            	message = new Message();
+    			message.what = GameOfLifeActivity.START;
+    			GameOfLifeActivity.this.myHandler.sendMessage(message);
+            	break;
+            case R.id.pause:
+            	Log.i("click", "pause");
             	if(thread != null){
             		thread.interrupt();
             		thread = null;
